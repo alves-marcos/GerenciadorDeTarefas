@@ -1,4 +1,4 @@
-tarefas = []
+
 
 def mostrar_menu():
     print("===== GERENCIADOR DE TAREFAS =====")
@@ -17,18 +17,27 @@ def adicionar_tarefa(lista):
 
         escolha_usuario = (input("Tarefa: "))
 
-        validar_escolha = escolha_usuario.strip()
 
-        if validar_escolha == "":
+        resultado = cadastrar_tarefa(lista, escolha_usuario)
+
+        if resultado == False: # if not resultado
             print("Valor Digitado Inválido!")
         else:
-            lista.append(validar_escolha)
-            print("Tarefa Cadastrada com Sucesso =", validar_escolha)
+            print("Tarefa Cadastrada com Sucesso!", escolha_usuario.strip())
             print()
             print("======================================")
             break
 
-def remover_tarefa(lista):
+def cadastrar_tarefa(lista: list[str], descricao: str) -> bool:
+    descricao = descricao.strip()
+
+    if descricao == "":
+        return False
+    else:
+        lista.append(descricao)
+        return True
+
+def remover_tarefa(lista: list[str]) -> None:
     if len(lista) == 0:
         print("====== NENHUMA TAREFA CADASTRADA! =====")
         print()
@@ -43,29 +52,39 @@ def remover_tarefa(lista):
             cont += 1
 
         print()
+
         while True:
             try:
                 escolha_remover = int(input("Escolha uma opção para Remover:  "))
 
                 if 0 <= escolha_remover < len(lista):
-                    print("Tarefa removida =", lista[escolha_remover])
-                    lista.pop(escolha_remover)
+                    tarefa_removida = lista[escolha_remover]
+
+                resultado = excluir_tarefa(lista, escolha_remover)
+
+                if resultado:
+                    print("Tarefa removida =", tarefa_removida)
                     break
                 else:
                     print("======================================")
                     print()
                     print("Escolha inválida!")
                     print("Selecione novamente")
-
                 print()
                 print("======================================")
+
             except ValueError:
                 print("Valor Incorreto: Digite novamente")
                 print()
                 print("======================================")
                 continue
 
-
+def excluir_tarefa(lista: list[str], indice:  int)-> bool:
+    if 0 <= indice < len(lista):
+        lista.pop(indice)
+        return True
+    else:
+        return False
 
 def listar_tarefas(lista):
         print()
@@ -82,41 +101,44 @@ def fim_programa():
     print("=========== FIM DO PROGRAMA ==========")
     print("======================================")
 
+def main():
+    tarefas = []
 
- # -----------------------------------------------------------------
+    while True:
+        mostrar_menu()
 
-while True:
-    mostrar_menu()
-
-    try:
-        escolha = int(input("Escolha uma opcao: "))
-        print("======================================")
-        print()
-        if escolha != 1 and escolha != 2 and escolha != 3 and escolha != 4:
+        try:
+            escolha = int(input("Escolha uma opcao: "))
+            print("======================================")
+            print()
+            if escolha != 1 and escolha != 2 and escolha != 3 and escolha != 4:
+                print("====== ESCOLHA INVALIDA =====")
+                print("====== ESCOLHA OUTRO VALOR =====")
+                print()
+                print("======================================")
+        except ValueError:
             print("====== ESCOLHA INVALIDA =====")
             print("====== ESCOLHA OUTRO VALOR =====")
             print()
             print("======================================")
-    except ValueError:
-        print("====== ESCOLHA INVALIDA =====")
-        print("====== ESCOLHA OUTRO VALOR =====")
-        print()
-        print("======================================")
-        continue
+            continue
 
-    if escolha == 1:
-        adicionar_tarefa(tarefas)
+        if escolha == 1:
+            adicionar_tarefa(tarefas)
 
-    elif escolha == 2:
-        remover_tarefa(tarefas)
+        elif escolha == 2:
+            remover_tarefa(tarefas)
 
-    elif escolha == 3:
-        listar_tarefas(tarefas)
+        elif escolha == 3:
+            listar_tarefas(tarefas)
 
-    elif escolha == 4:
-        fim_programa()
-        break
+        elif escolha == 4:
+            fim_programa()
+            break
 
+# -----------------------------------------------------------------
+
+main()
 
 
 
