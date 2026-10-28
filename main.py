@@ -6,7 +6,8 @@ def mostrar_menu():
     print("1 - Adicionar tarefa")
     print("2 - Remover tarefa")
     print("3 - Listar tarefas")
-    print("4 - Sair")
+    print("4 - Editar tarefa")
+    print("5 - Sair")
     print()
 
 def adicionar_tarefa(lista):
@@ -28,13 +29,19 @@ def adicionar_tarefa(lista):
             print("======================================")
             break
 
-def cadastrar_tarefa(lista: list[str], descricao: str) -> bool:
+def cadastrar_tarefa(lista: list[dict], descricao: str, id: int) -> bool:
     descricao = descricao.strip()
+
+    nova_tarefa = {
+        "id": id,
+        "descricao": descricao,
+        "concluida": False
+    }
 
     if descricao == "":
         return False
     else:
-        lista.append(descricao)
+        lista.append(nova_tarefa)
         return True
 
 def remover_tarefa(lista: list[str]) -> None:
@@ -79,21 +86,38 @@ def remover_tarefa(lista: list[str]) -> None:
                 print("======================================")
                 continue
 
-def excluir_tarefa(lista: list[str], indice:  int)-> bool:
-    if 0 <= indice < len(lista):
-        lista.pop(indice)
-        return True
-    else:
+def excluir_tarefa(lista: list[dict], id: int)-> bool:
+
+    for x in lista:
+        if x["id"] == id:
+            lista.remove(x)
+            return True
+
+    return False
+
+def listar_tarefas(lista: list[dict]):
+    print()
+    print("===== LISTA DE TAREFAS =====")
+    print()
+    for i in lista:
+        print(f"Tarefa: {i.get('descricao')}")
+    print()
+    print("======================================")
+
+def editar_tarefa(lista: list[dict], id: int, nova_descricao):
+
+    verificador = nova_descricao.strip()
+    if verificador == "":
         return False
 
-def listar_tarefas(lista):
-        print()
-        print("===== LISTA DE TAREFAS =====")
-        print()
-        for i in lista:
-            print(f"Tarefa: {i}")
-        print()
-        print("======================================")
+    for tarefa in lista:
+        if tarefa["id"] == id:
+            tarefa["descricao"] = verificador
+            return True
+    return False
+
+
+
 
 
 def fim_programa():
@@ -111,7 +135,7 @@ def main():
             escolha = int(input("Escolha uma opcao: "))
             print("======================================")
             print()
-            if escolha != 1 and escolha != 2 and escolha != 3 and escolha != 4:
+            if escolha != 1 and escolha != 2 and escolha != 3 and escolha != 4 and escolha != 5:
                 print("====== ESCOLHA INVALIDA =====")
                 print("====== ESCOLHA OUTRO VALOR =====")
                 print()
@@ -133,12 +157,16 @@ def main():
             listar_tarefas(tarefas)
 
         elif escolha == 4:
+            editar_tarefa(tarefas)
+
+        elif escolha == 5:
             fim_programa()
             break
 
 # -----------------------------------------------------------------
 
-main()
+if __name__ == "__main__":
+    main()
 
 
 
